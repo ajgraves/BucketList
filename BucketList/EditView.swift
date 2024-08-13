@@ -49,14 +49,24 @@ struct EditView: View {
             }
             .navigationTitle("Place details")
             .toolbar {
-                Button("Save") {
-                    var newLocation = location
-                    newLocation.id = UUID()
-                    newLocation.name = name
-                    newLocation.description = description
-                    
-                    onSave(newLocation)
-                    dismiss()
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Delete", role: .destructive) {
+                        
+                    }
+                    .foregroundColor(.red)
+                    .fontWeight(.bold)
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
+                        var newLocation = location
+                        newLocation.id = UUID()
+                        newLocation.name = name
+                        newLocation.description = description
+                        
+                        onSave(newLocation)
+                        dismiss()
+                    }
                 }
             }
             .task {
