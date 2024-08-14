@@ -9,6 +9,7 @@ import CoreLocation
 import Foundation
 import LocalAuthentication
 import MapKit
+import _MapKit_SwiftUI
 
 extension ContentView {
     @Observable
@@ -16,6 +17,18 @@ extension ContentView {
         private(set) var locations: [Location]
         var selectedPlace: Location?
         var isUnlocked = false
+        var mapType = 0
+        var authenticationFailed = false
+        private(set) var authenticationFailedMessage = ""
+        
+        var selectedMapStyle: MapStyle {
+            return switch(mapType) {
+            case 0: .standard
+            case 1: .hybrid
+            case 2: .imagery
+            default: .standard
+            }
+        }
         
         let savePath = URL.documentsDirectory.appending(path: "SavedPlaces")
         
@@ -64,6 +77,8 @@ extension ContentView {
                         self.isUnlocked = true
                     } else {
                         // error
+                        self.authenticationFailed = true
+                        self.authenticationFailedMessage = authenticationError?.localizedDescription ?? "Unknown error"
                     }
                 }
             } else {
