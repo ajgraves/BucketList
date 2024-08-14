@@ -10,6 +10,7 @@ import SwiftUI
 struct EditView: View {
     @Environment(\.dismiss) var dismiss
     @State private var viewModel = ViewModel(location: .example)
+    @State private var showingConfirmation = false
 
     var onSave: (Location) -> Void
     
@@ -40,13 +41,13 @@ struct EditView: View {
             }
             .navigationTitle("Place details")
             .toolbar {
-                /*ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button("Delete", role: .destructive) {
-                        
+                        showingConfirmation.toggle()
                     }
                     .foregroundColor(.red)
                     //.fontWeight(.bold)
-                }*/
+                }
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
@@ -54,6 +55,15 @@ struct EditView: View {
                         dismiss()
                     }
                 }
+            }
+            .alert("Are you sure?", isPresented: $showingConfirmation) {
+                Button("Cancel", role: .cancel) { }
+                Button("Yes") {
+                    onSave(viewModel.deleteLocation(location: viewModel.location))
+                    dismiss()
+                }
+            } message: {
+                Text("Are you sure you want to delete \(viewModel.name)?")
             }
             .task {
                 await viewModel.fetchNearbyPlaces()

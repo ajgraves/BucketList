@@ -54,5 +54,11 @@ extension EditView {
             newLocation.description = description
             return newLocation
         }
+        
+        func deleteLocation(location: Location) -> Location {
+            var deletedLocation = location
+            deletedLocation.name = "!!!DELETE!!!" + location.name
+            return deletedLocation
+        }
     }
 }

@@ -59,6 +59,16 @@ extension ContentView {
         func update(location: Location) {
             guard let selectedPlace else { return }
             
+            // Are we deleting?
+            if location.name.starts(with: "!!!DELETE!!!") {
+                if let index = locations.firstIndex(of: location) {
+                    locations.remove(at: index)
+                    save()
+                    return
+                }
+            }
+            
+            // Are we updating?
             if let index = locations.firstIndex(of: selectedPlace) {
                 locations[index] = location
                 save()
